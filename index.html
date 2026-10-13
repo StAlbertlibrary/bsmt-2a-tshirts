@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="BSMT-2A Intramurals t-shirt size selection, College of Medical Technology, NDHSCCI">
+<meta name="theme-color" content="#C1121F">
+<title>BSMT-2A Intramurals T-Shirt Size Picker</title>
+<link rel="icon" href="logo.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#C1121F; --deep:#8E0B14; --ink:#14090A; --blush:#FFE5E2; --paper:#FFFFFF; --rope:#14090A;
+    --display:'Bagel Fat One','Arial Rounded MT Bold',system-ui,sans-serif;
+    --body:'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; min-height:100vh; background:var(--red); color:var(--ink); font-family:var(--body);
+    background-image:radial-gradient(rgba(255,255,255,.28) 2px, transparent 2.5px);
+    background-size:26px 26px;
+  }
+  .wrap{max-width:980px; margin:0 auto; padding:26px 18px 60px}
+
+  /* header */
+  header{display:flex; flex-wrap:wrap; align-items:center; gap:14px 22px; color:#fff}
+  .logo{
+    width:clamp(92px,22vw,138px); height:auto; flex:none; border-radius:50%;
+    box-shadow:0 0 0 4px #fff, 0 0 0 7px var(--ink), 6px 8px 0 7px var(--ink);
+    animation:bob 4s ease-in-out infinite;
+  }
+  .logo:hover{animation:spin 1s ease-in-out}
+  @keyframes bob{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .titles{min-width:0}
+  .sticker{
+    display:inline-block; font-family:var(--display); font-size:clamp(1.3rem,4.5vw,1.9rem); background:#fff; color:var(--red);
+    padding:4px 16px 6px; border-radius:12px; transform:rotate(-3deg); box-shadow:4px 4px 0 var(--ink);
+  }
+  h1{font-family:var(--display); font-weight:400; font-size:clamp(2.2rem,7.5vw,4rem); line-height:1; margin:10px 0 0; text-shadow:3px 3px 0 var(--ink)}
+  .college{margin:8px 0 0; font-weight:700; font-size:.95rem}
+  .sub{margin:18px 0 0; font-size:1.08rem; max-width:54ch; color:#fff}
+
+  .card{background:var(--paper); border:3px solid var(--ink); border-radius:24px; box-shadow:8px 8px 0 var(--ink); padding:22px; margin-top:26px}
+  .hidden{display:none !important}
+  label.field{display:block; font-weight:700; margin-bottom:8px}
+  .row{display:flex; flex-wrap:wrap; gap:12px}
+  .row input{flex:1 1 220px}
+  input[type=text]{
+    width:100%; font:inherit; font-size:1.15rem; padding:13px 16px; border:3px solid var(--ink); border-radius:14px;
+    background:#fff; color:var(--ink);
+  }
+  input[type=text]::placeholder{color:#8c7a7b}
+  :focus-visible{outline:4px solid var(--ink); outline-offset:3px; box-shadow:0 0 0 7px #fff}
+
+  .greet{font-family:var(--display); font-size:clamp(1.5rem,4.5vw,2.1rem); margin:0 0 4px; overflow-wrap:anywhere; color:var(--red)}
+  .who{margin:0 0 4px; opacity:.85}
+
+  /* clothesline */
+  .line-title{font-weight:700; margin:20px 0 0}
+  .rack{position:relative; padding-top:26px; margin-top:6px}
+  .rack::before{content:""; position:absolute; left:-6px; right:-6px; top:10px; height:6px; background:var(--ink); border-radius:6px}
+  .shirts{display:flex; flex-wrap:wrap; justify-content:center; align-items:flex-start; gap:6px 10px; list-style:none; margin:0; padding:0}
+  .shirts li{position:relative}
+  .shirts li::before{content:""; position:absolute; top:-22px; left:50%; width:12px; height:26px; margin-left:-6px; background:var(--red); border:2px solid var(--ink); border-radius:4px; z-index:2}
+  .size{
+    --s:1; appearance:none; background:none; border:0; padding:0; cursor:pointer; color:var(--ink);
+    width:calc(78px * var(--s)); display:flex; flex-direction:column; align-items:center; font:inherit;
+    transform-origin:50% 0; transition:transform .25s cubic-bezier(.3,1.6,.5,1);
+  }
+  .size svg{width:100%; height:auto; display:block; overflow:visible}
+  /* the shirt path lives inside <symbol>, so colours come in through custom properties */
+  .tee{fill:var(--f,#fff); stroke:var(--ink); stroke-width:var(--sw,3.2); stroke-linejoin:round}
+  .size:hover{--f:var(--blush)}
+  .size:hover{transform:rotate(-4deg)}
+  li:nth-child(even) .size:hover{transform:rotate(4deg)}
+  .size .lbl{font-family:var(--display); font-size:clamp(.95rem,2.4vw,1.25rem); margin-top:4px}
+  .size .cnt{font-size:.75rem; font-weight:700; opacity:.65; min-height:1em}
+  .size[aria-checked=true]{animation:swing .7s ease-out}
+  .size[aria-checked=true]{--f:var(--red)}
+  .size[aria-checked=true] .lbl{background:var(--ink); color:#fff; padding:0 10px; border-radius:10px}
+  @keyframes swing{0%{transform:rotate(0)}25%{transform:rotate(-9deg)}55%{transform:rotate(6deg)}80%{transform:rotate(-2deg)}100%{transform:rotate(0)}}
+  .hint{text-align:center; font-size:.9rem; margin:14px 0 0; opacity:.8}
+
+  /* preview shirt with the college logo on the chest */
+  .preview{display:flex; flex-wrap:wrap; gap:18px 28px; align-items:center; justify-content:center; margin-top:26px; padding-top:24px; border-top:3px dashed var(--ink)}
+  .big{position:relative; width:min(250px,72vw)}
+  .big svg{width:100%; height:auto; display:block}
+  .big{--f:var(--blush); --sw:2.4}
+  .big.picked{--f:var(--red)}
+  .print{position:absolute; left:0; right:0; top:27%; display:flex; flex-direction:column; align-items:center; line-height:1; pointer-events:none; color:var(--ink); transition:color .2s}
+  .big.picked .print{color:#fff}
+  .print img{width:30%; height:auto; border-radius:50%; background:#fff; box-shadow:0 0 0 2px var(--ink)}
+  .print .sz{font-family:var(--display); font-size:2.8rem; margin:6px 0 2px}
+  .print .nm{width:100%; font-size:.74rem; font-weight:700; padding:0 28%; text-align:center; overflow-wrap:anywhere; line-height:1.15}
+  .summary{max-width:30ch}
+  .summary p{margin:0 0 14px; font-size:1.1rem}
+
+  button.go{
+    font-family:var(--display); font-size:1.4rem; color:#fff; background:var(--red); border:3px solid var(--ink);
+    padding:12px 28px 14px; border-radius:16px; cursor:pointer; box-shadow:5px 5px 0 var(--ink);
+    transition:transform .12s, box-shadow .12s;
+  }
+  button.go.sm{font-size:1.15rem; padding:11px 22px 13px}
+  button.go:hover:not(:disabled){transform:translate(-2px,-2px); box-shadow:7px 7px 0 var(--ink)}
+  button.go:active:not(:disabled){transform:translate(3px,3px); box-shadow:2px 2px 0 var(--ink)}
+  button.go:disabled{opacity:.45; cursor:not-allowed; box-shadow:none}
+  button.link{background:none; border:0; font:inherit; font-weight:700; text-decoration:underline; cursor:pointer; color:var(--red); padding:0}
+
+  .msg{margin-top:14px; padding:12px 14px; border:3px solid var(--ink); border-radius:14px; font-weight:500; display:none}
+  .msg.show{display:block}
+  .msg.err{background:var(--blush)}
+  .done{text-align:center}
+  .done img{width:110px; height:auto; border-radius:50%; box-shadow:0 0 0 3px var(--ink)}
+  .done h2{font-family:var(--display); font-weight:400; font-size:clamp(1.8rem,6vw,2.6rem); margin:14px 0 6px; color:var(--red)}
+  .done p{max-width:44ch; margin:8px auto}
+  footer{text-align:center; margin-top:26px; font-size:.9rem; color:#fff; font-weight:500}
+
+  .banner{margin:14px 0 0; padding:10px 16px; background:#fff; color:var(--ink); border:3px solid var(--ink); border-radius:14px; font-weight:700; box-shadow:4px 4px 0 var(--ink); max-width:max-content}
+  .guide{margin-top:14px} .guide summary{cursor:pointer; font-weight:700; text-align:center}
+  .guide table{border-collapse:collapse; margin:10px auto} .guide th,.guide td{border:2px solid var(--ink); padding:6px 14px; text-align:center}
+  .guide th{background:var(--ink); color:#fff}
+  #sid{text-transform:uppercase}
+  #sid::placeholder{text-transform:none}
+  button.go.alt{background:#fff; color:var(--ink)}
+  .steps{display:flex; flex-wrap:wrap; gap:8px; list-style:none; margin:18px 0 0; padding:0}
+  .steps li{font-weight:700; font-size:.9rem; padding:5px 14px; border-radius:999px; border:2px solid #fff; color:#fff; opacity:.75; transition:background .25s, color .25s}
+  .steps li.on{background:#fff; color:var(--red); opacity:1}
+  .steps li.past{background:var(--ink); border-color:var(--ink); opacity:1}
+  dialog{border:3px solid var(--ink); border-radius:22px; box-shadow:8px 8px 0 var(--ink); padding:22px; width:min(380px,92vw); font:inherit; color:var(--ink)}
+  dialog::backdrop{background:rgba(20,9,10,.65)}
+  dialog p{font-size:1.2rem; font-weight:700; margin:0 0 18px}
+  .dlgrow{display:flex; flex-wrap:wrap; gap:12px}
+  .greet:focus{outline:none}
+  /* confetti on success */
+  .bit{position:fixed; top:-16px; width:10px; height:16px; z-index:50; pointer-events:none; animation:fall linear forwards}
+  @keyframes fall{to{transform:translate(var(--dx), 108vh) rotate(var(--rot))}}
+
+  @media (max-width:520px){ .size{width:calc(62px * var(--s))} .card{padding:16px} }
+  @media (prefers-reduced-motion:reduce){
+    .logo{animation:none} .logo:hover{animation:none}
+    .size,.size:hover{transition:none; transform:none}
+    .size[aria-checked=true]{animation:none}
+    .bit{display:none}
+  }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="tee" viewBox="0 0 100 100">
+    <path class="tee" d="M34 10 Q50 24 66 10 L93 24 L83 45 L73 40 V93 H27 V40 L17 45 L7 24 Z"/>
+  </symbol>
+</svg>
+
+<main class="wrap">
+  <header>
+    <img class="logo" src="logo.png" alt="College of Medical Technology NDHSCCI seal" width="138" height="138">
+    <div class="titles">
+      <div class="sticker">BSMT-2A</div>
+      <h1>Pick your Intramurals tee!</h1>
+      <p class="college">College of Medical Technology, NDHSCCI</p>
+    </div>
+  </header>
+  <p class="sub">Type your student ID number, then tap the shirt that fits you best. You only get one pick, so choose carefully.</p>
+  <ol class="steps" id="steps" aria-label="Progress"><li class="on">Find me</li><li>Pick a size</li><li>All set</li></ol>
+  <div class="banner hidden" id="banner" role="status"></div>
+  <noscript><div class="card">Please turn on JavaScript to pick your size.</div></noscript>
+
+  <!-- STEP 1: student ID -->
+  <section class="card" id="idCard">
+    <label class="field" for="sid">Your student ID number</label>
+    <div class="row">
+      <input type="text" id="sid" inputmode="text" autocomplete="off" autocapitalize="characters" maxlength="30" placeholder="e.g. BSMT25-001">
+      <button class="go sm" id="findBtn" type="button">Find me</button>
+    </div>
+    <div class="msg" id="idMsg" role="status" aria-live="polite"></div>
+  </section>
+
+  <!-- STEP 2: pick a size -->
+  <section class="card hidden" id="pickCard">
+    <p class="greet" id="greet"></p>
+    <p class="who">Not you? <button class="link" id="notMe" type="button">Use a different ID number</button></p>
+
+    <p class="line-title" id="sizeLabel">Which shirt is yours?</p>
+    <div class="rack">
+      <ul class="shirts" role="radiogroup" aria-labelledby="sizeLabel" id="shirts"></ul>
+    </div>
+    <p class="hint">Shirts are drawn to scale, from tiny XS to huge XXXL.</p>
+    <details class="guide hidden" id="guide"><summary>Not sure? See the size chart</summary><div style="overflow-x:auto"><table id="guideTable"></table></div></details>
+
+    <div class="preview">
+      <div class="big" id="big" aria-hidden="true">
+        <svg viewBox="0 0 100 100"><use href="#tee"/></svg>
+        <div class="print">
+          <img src="logo.png" alt="">
+          <div class="sz" id="pvSize">?</div>
+          <div class="nm" id="pvName"></div>
+        </div>
+      </div>
+      <div class="summary">
+        <p id="summaryText">Pick a size to see your shirt.</p>
+        <button class="go" id="submit" type="button" disabled>Lock in my size</button>
+      </div>
+    </div>
+    <div class="msg" id="msg" role="status" aria-live="polite"></div>
+  </section>
+
+  <!-- DONE -->
+  <section class="card done hidden" id="doneCard">
+    <img src="logo.png" alt="">
+    <h2 id="doneTitle">You're all set!</h2>
+    <p id="doneText"></p>
+    <p id="doneNote">Wrong size? Tell your class officer so they can fix it.</p>
+  </section>
+
+  <footer>BSMT-2A Intramurals t-shirt order</footer>
+
+  <dialog id="confirmDlg" aria-labelledby="confirmText">
+    <p id="confirmText"></p>
+    <div class="dlgrow">
+      <button class="go sm" id="yes" type="button">Yes, lock it in</button>
+      <button class="go sm alt" id="no" type="button">Go back</button>
+    </div>
+  </dialog>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.0/dist/umd/supabase.js"></script>
+<script>
+  // ====== PUT YOUR SUPABASE DETAILS HERE (Supabase > Settings > API Keys) ======
+  const SUPABASE_URL = "https://rzhhhlwzgnwofdnfyajq.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6aGhobHd6Z253b2ZkbmZ5YWpxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE4MzQwNjEsImV4cCI6MjEwNzQxMDA2MX0.TrkcKsvBs0NGYcjpYvji3KopN7aWe73x7BZLOIg9Th8";
+  // =====================================================================
+
+  const SIZES = [
+    {k:"XS", s:.62}, {k:"S", s:.72}, {k:"M", s:.82}, {k:"L", s:.92},
+    {k:"XL", s:1.02}, {k:"XXL", s:1.12}, {k:"XXXL", s:1.22}
+  ];
+  const $ = id => document.getElementById(id);
+
+  // ---- SIZE CHART: fill in with your supplier's numbers to show a size guide (leave [] to hide it) ----
+  const SIZE_CHART_HEAD = ["Size", "Chest width (in)", "Length (in)"];
+  const SIZE_CHART = [];   // example: [["XS","17","24"], ["S","18","25"], ["M","19","26"]]
+  if (SIZE_CHART.length) {
+    $("guideTable").innerHTML = "<tr>" + SIZE_CHART_HEAD.map(h => `<th>${h}</th>`).join("") + "</tr>" +
+      SIZE_CHART.map(r => "<tr>" + r.map(c => `<td>${c}</td>`).join("") + "</tr>").join("");
+    $("guide").classList.remove("hidden");
+  }
+  const configured = !SUPABASE_URL.includes("YOUR-PROJECT-ID");
+  const db = configured ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+  let picked = null, studentId = "", student = null;
+
+  function showMsg(el, text, type){ el.textContent = text; el.className = "msg show " + (type || "err"); }
+  function hideMsg(el){ el.className = "msg"; }
+  const fullName = s => [s.first_name, s.middle_name, s.last_name].filter(Boolean).join(" ");
+
+  function setStep(n){
+    document.querySelectorAll("#steps li").forEach((li, i) => { li.className = i + 1 === n ? "on" : (i + 1 < n ? "past" : ""); });
+  }
+
+  // ---- build the shirts ----
+  const ul = $("shirts");
+  SIZES.forEach(({k, s}, i) => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <button type="button" class="size" role="radio" aria-checked="false" aria-label="Size ${k}" data-size="${k}" style="--s:${s}" tabindex="${i ? -1 : 0}">
+        <svg viewBox="0 0 100 100" aria-hidden="true"><use href="#tee"/></svg>
+        <span class="lbl">${k}</span>
+        <span class="cnt" id="cnt-${k}"></span>
+      </button>`;
+    ul.appendChild(li);
+  });
+  ul.addEventListener("click", e => { const b = e.target.closest(".size"); if (b) choose(b.dataset.size); });
+  ul.addEventListener("keydown", e => {
+    if (!["ArrowRight","ArrowLeft","ArrowDown","ArrowUp"].includes(e.key)) return;
+    e.preventDefault();
+    const i = Math.max(0, SIZES.findIndex(x => x.k === picked));
+    const d = (e.key === "ArrowRight" || e.key === "ArrowDown") ? 1 : -1;
+    const n = SIZES[(i + d + SIZES.length) % SIZES.length].k;
+    choose(n); ul.querySelector(`[data-size="${n}"]`).focus();
+  });
+
+  function choose(k){
+    picked = k;
+    ul.querySelectorAll(".size").forEach(b => {
+      const on = b.dataset.size === k;
+      b.setAttribute("aria-checked", on);
+      b.tabIndex = on ? 0 : -1;
+    });
+    $("big").classList.add("picked");
+    $("pvSize").textContent = k;
+    $("summaryText").textContent = `${student.first_name}, you picked size ${k}.`;
+    $("submit").disabled = false;
+  }
+
+  // ---- deadline + "can change" settings (set by the admin) ----
+  let settings = null;
+  const fmtDate = iso => new Date(iso).toLocaleString("en-PH", { dateStyle: "long", timeStyle: "short" });
+  async function loadSettings(){
+    if (!db) return;
+    try {
+      const { data } = await db.rpc("get_settings");
+      if (!data || !data[0]) return;
+      settings = data[0];
+      if (settings.deadline) {
+        $("banner").textContent = settings.is_open ? `Picking closes ${fmtDate(settings.deadline)}` : "Picking is closed.";
+        $("banner").classList.remove("hidden");
+      }
+    } catch (_) {}
+  }
+  const settingsReady = loadSettings();
+
+  // ---- step 1: find the student ----
+  async function findMe(){
+    hideMsg($("idMsg"));
+    const id = $("sid").value.trim().toUpperCase();
+    if (id.length < 3) { showMsg($("idMsg"), "Type your student ID number first."); return; }
+    if (!configured) { showMsg($("idMsg"), "Add your Supabase URL and anon key in index.html first."); return; }
+    $("findBtn").disabled = true; $("findBtn").textContent = "Looking...";
+    await settingsReady;
+    const { data, error } = await db.rpc("lookup_student", { p_student_id: id });
+    $("findBtn").disabled = false; $("findBtn").textContent = "Find me";
+
+    if (error) { showMsg($("idMsg"), "Could not connect. Check your internet and try again."); return; }
+    if (!data || !data.length) {
+      showMsg($("idMsg"), "That ID number is not on the BSMT-2A list. Check the number or ask your class officer.");
+      return;
+    }
+    studentId = id; student = data[0];
+    if (settings && !settings.is_open) { showDone(student, student.size, true, true); return; }
+    if (student.size && !(settings && settings.allow_changes)) { showDone(student, student.size, true); return; }
+
+    $("greet").textContent = `Hi, ${student.first_name}! Let's find your fit.`;
+    $("pvName").textContent = fullName(student);
+    $("idCard").classList.add("hidden");
+    $("pickCard").classList.remove("hidden");
+    setStep(2);
+    $("greet").tabIndex = -1; $("greet").focus({ preventScroll: true });
+    loadCounts();
+    if (student.size) choose(student.size);
+  }
+  $("findBtn").addEventListener("click", findMe);
+  $("sid").addEventListener("keydown", e => { if (e.key === "Enter") findMe(); });
+
+  $("notMe").addEventListener("click", () => {
+    picked = null; student = null; studentId = "";
+    $("sid").value = "";
+    $("big").classList.remove("picked"); $("pvSize").textContent = "?";
+    $("summaryText").textContent = "Pick a size to see your shirt.";
+    $("submit").disabled = true; hideMsg($("msg"));
+    ul.querySelectorAll(".size").forEach(b => b.setAttribute("aria-checked", "false"));
+    $("pickCard").classList.add("hidden");
+    $("idCard").classList.remove("hidden");
+    setStep(1);
+    $("sid").focus();
+  });
+
+  // ---- step 2: save the size ----
+  $("submit").addEventListener("click", () => {
+    if (!picked || !student) return;
+    $("confirmText").textContent = (settings && settings.allow_changes)
+      ? `Save size ${picked}? You can change it again while picking is open.`
+      : `Lock in size ${picked}? You can't change it yourself afterwards.`;
+    $("confirmDlg").showModal();
+  });
+  $("no").addEventListener("click", () => $("confirmDlg").close());
+  $("yes").addEventListener("click", () => { $("confirmDlg").close(); doSave(); });
+
+  async function doSave(){
+    if (!picked || !student) return;
+    $("submit").disabled = true; $("submit").textContent = "Saving...";
+    const { data, error } = await db.rpc("submit_size", { p_student_id: studentId, p_size: picked });
+    $("submit").textContent = "Lock in my size";
+
+    if (error) { showMsg($("msg"), "Could not save your size. Check your internet and try again."); $("submit").disabled = false; return; }
+    if (data === "ok") { showDone(student, picked, false); return; }
+    if (data === "closed") { showMsg($("msg"), "Picking is now closed. Ask your class officer."); return; }
+    if (data === "already") { showMsg($("msg"), "A size is already saved for this ID. Ask your class officer if it needs to change."); return; }
+    showMsg($("msg"), "Something went wrong. Please try again.");
+    $("submit").disabled = false;
+  }
+
+  function showDone(s, size, wasAlready, closed){
+    $("idCard").classList.add("hidden");
+    $("pickCard").classList.add("hidden");
+    $("doneCard").classList.remove("hidden");
+    setStep(3);
+    $("doneTitle").textContent = wasAlready ? "Already done!" : "You're all set, future Med Tech!";
+    $("doneText").textContent = wasAlready
+      ? `${fullName(s)}, your size ${size} was already saved for the BSMT-2A Intramurals shirt.`
+      : `${fullName(s)}, your size ${size} is saved for the BSMT-2A Intramurals shirt.`;
+    if (closed) {
+      $("doneTitle").textContent = "Picking is closed";
+      $("doneText").textContent = size ? `${fullName(s)}, your size is ${size}.` : `${fullName(s)}, no size was saved before the deadline. Please see your class officer.`;
+    }
+    $("doneNote").textContent = closed ? "Need a change? Tell your class officer."
+      : (settings && settings.allow_changes ? "You can come back with your ID number to change it while picking is open."
+      : "Wrong size? Tell your class officer so they can fix it.");
+    window.scrollTo({top:0, behavior:"smooth"});
+    if (!wasAlready) confetti();
+  }
+
+  function confetti(){
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const colors = ["#FFFFFF", "#14090A", "#FF6B6B", "#FFE5E2", "#8E0B14"];
+    for (let i = 0; i < 48; i++) {
+      const b = document.createElement("span");
+      b.className = "bit";
+      b.style.left = Math.random() * 100 + "vw";
+      b.style.background = colors[i % colors.length];
+      b.style.setProperty("--dx", (Math.random() * 160 - 80) + "px");
+      b.style.setProperty("--rot", (Math.random() * 900 - 450) + "deg");
+      b.style.animationDuration = (2.2 + Math.random() * 1.8) + "s";
+      b.style.animationDelay = (Math.random() * .5) + "s";
+      document.body.appendChild(b);
+      setTimeout(() => b.remove(), 5000);
+    }
+  }
+
+  // ---- optional: how many classmates picked each size ----
+  async function loadCounts(){
+    try {
+      const { data, error } = await db.rpc("size_counts");
+      if (error || !data) return;
+      data.forEach(r => { const el = $("cnt-" + r.size); if (el) el.textContent = r.total > 0 ? r.total : ""; });
+    } catch (_) {}
+  }
+</script>
+</body>
+</html>

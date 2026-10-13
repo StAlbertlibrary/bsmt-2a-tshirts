@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>BSMT-2A Intramurals T-Shirt Admin</title>
+<link rel="icon" href="logo.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#C1121F; --sun:#FFFFFF; --ink:#14090A; --coral:#C1121F; --mint:#8E0B14; --paper:#FFFFFF; --soft:#FFF1EF;
+    --display:'Bagel Fat One','Arial Rounded MT Bold',system-ui,sans-serif;
+    --body:'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0; min-height:100vh; background:var(--red); color:var(--ink); font-family:var(--body);
+    background-image:radial-gradient(rgba(255,255,255,.28) 2px, transparent 2.5px); background-size:26px 26px}
+  .wrap{max-width:1040px; margin:0 auto; padding:24px 16px 60px}
+  .top{display:flex; flex-wrap:wrap; align-items:center; gap:12px 18px; justify-content:space-between}
+  .brand{display:flex; align-items:center; gap:14px; flex-wrap:wrap}
+  .sticker{font-family:var(--display); font-size:1.5rem; background:#fff; color:var(--red); padding:4px 14px 6px; border-radius:12px; transform:rotate(-3deg); box-shadow:3px 3px 0 var(--ink)}
+  .logo{width:72px; height:72px; border-radius:50%; box-shadow:0 0 0 3px #fff, 0 0 0 5px var(--ink)}
+  .top{color:#fff}
+  #roleTag{color:var(--ink); background:#fff}
+  h1{text-shadow:2px 2px 0 var(--ink)}
+  .card h2{color:var(--red)}
+  h1{font-family:var(--display); font-weight:400; font-size:clamp(1.6rem,5vw,2.4rem); margin:0}
+  h2{font-family:var(--display); font-weight:400; font-size:1.5rem; margin:0 0 12px}
+  .card{background:var(--paper); border:3px solid var(--ink); border-radius:20px; box-shadow:6px 6px 0 var(--ink); padding:20px; margin-top:22px}
+  .hidden{display:none !important}
+  label{display:block; font-weight:700; margin-bottom:6px; font-size:.95rem}
+  input[type=text],input[type=email],input[type=password],input[type=search],select,textarea{
+    width:100%; font:inherit; padding:10px 12px; border:3px solid var(--ink); border-radius:12px; background:#fff; color:var(--ink)}
+  textarea{min-height:120px; resize:vertical}
+  :focus-visible{outline:4px solid var(--coral); outline-offset:2px}
+  .grid{display:grid; grid-template-columns:1fr 1.3fr 1.3fr 1fr; gap:12px}
+  @media (max-width:760px){.grid{grid-template-columns:1fr 1fr}}
+  @media (max-width:420px){.grid{grid-template-columns:1fr}}
+  .actions{display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; align-items:center}
+  button.btn{font-family:var(--display); font-size:1.05rem; color:var(--sun); background:var(--ink); border:3px solid var(--ink);
+    padding:8px 18px 10px; border-radius:14px; cursor:pointer; box-shadow:4px 4px 0 var(--coral); transition:transform .12s, box-shadow .12s}
+  button.btn:hover:not(:disabled){transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--coral)}
+  button.btn:active:not(:disabled){transform:translate(2px,2px); box-shadow:1px 1px 0 var(--coral)}
+  button.btn:disabled{opacity:.5; cursor:not-allowed}
+  button.btn.alt{background:#fff; color:var(--ink); box-shadow:4px 4px 0 var(--mint)}
+  button.btn.alt:hover:not(:disabled){box-shadow:6px 6px 0 var(--mint)}
+  button.mini{font:inherit; font-weight:700; font-size:.85rem; border:2px solid var(--ink); background:#fff; color:var(--ink); border-radius:10px; padding:4px 10px; cursor:pointer}
+  button.mini.del{background:#ffe3e2}
+  .msg{margin-top:12px; padding:10px 12px; border:3px solid var(--ink); border-radius:12px; font-weight:500; display:none}
+  .msg.show{display:block} .msg.err{background:#ffe3e2} .msg.ok{background:#d6fbe9}
+  details{margin-top:14px} summary{cursor:pointer; font-weight:700}
+  .note{font-size:.88rem; opacity:.8; margin:6px 0 0}
+
+  .chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
+  .chip{border:2px solid var(--ink); border-radius:999px; padding:4px 12px; font-weight:700; background:var(--soft)}
+  .chip b{font-family:var(--display); font-weight:400; margin-right:6px}
+  .bar{display:flex; flex-wrap:wrap; gap:12px; align-items:end; justify-content:space-between}
+  .bar .search{flex:1 1 220px; max-width:340px}
+  .tablewrap{overflow-x:auto; margin-top:14px; border:3px solid var(--ink); border-radius:14px}
+  table{border-collapse:collapse; width:100%; min-width:640px}
+  th,td{text-align:left; padding:9px 12px; border-bottom:2px solid #dfe3ee; vertical-align:middle}
+  th{background:var(--ink); color:var(--sun); font-family:var(--display); font-weight:400; position:sticky; top:0}
+  tr:last-child td{border-bottom:0}
+  td.sz select{width:auto; padding:5px 8px; border-width:2px}
+  .none{opacity:.5}
+  .prog{height:12px; border:2px solid var(--ink); border-radius:99px; overflow:hidden; margin-top:12px; background:var(--soft)}
+  .prog i{display:block; height:100%; width:0; background:var(--red); transition:width .5s}
+  tr.todo td{background:#FFF6F5}
+  input[type=datetime-local]{width:100%; font:inherit; padding:10px 12px; border:3px solid var(--ink); border-radius:12px; background:#fff; color:var(--ink)}
+  .showpw{display:flex; gap:8px; align-items:center; font-weight:500; margin-top:8px}
+  .showpw input{width:18px; height:18px}
+  .pending{font-weight:700; color:#b3261e}
+  .ok{font-weight:700; color:#0b7a4b}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="top">
+    <div class="brand"><img class="logo" src="logo.png" alt="College of Medical Technology seal"><div class="sticker">BSMT-2A</div><h1>Intramurals T-shirt admin</h1></div>
+    <div style="display:flex; gap:12px; align-items:center">
+      <span class="chip hidden" id="roleTag"></span>
+      <button class="btn alt hidden" id="signOut" type="button">Sign out</button>
+    </div>
+  </div>
+
+  <!-- LOGIN -->
+  <section class="card" id="loginCard" style="max-width:460px">
+    <h2>Admin sign in</h2>
+    <label for="user">Username</label>
+    <input type="text" id="user" autocomplete="username" autocapitalize="none" spellcheck="false">
+    <label for="pw" style="margin-top:12px">Password</label>
+    <input type="password" id="pw" autocomplete="current-password">
+    <label class="showpw"><input type="checkbox" id="showPw"> Show password</label>
+    <div class="actions"><button class="btn" id="signIn" type="button">Sign in</button></div>
+    <div class="msg" id="loginMsg" role="status" aria-live="polite"></div>
+  </section>
+
+  <!-- ADMIN PANEL -->
+  <div id="panel" class="hidden">
+
+    <section class="card" id="addCard">
+      <h2 id="formTitle">Add a student</h2>
+      <div class="grid">
+        <div><label for="fId">Student ID number</label><input type="text" id="fId" autocomplete="off"></div>
+        <div><label for="fLast">Last name</label><input type="text" id="fLast" autocomplete="off"></div>
+        <div><label for="fFirst">First name</label><input type="text" id="fFirst" autocomplete="off"></div>
+        <div><label for="fMid">Middle name (optional)</label><input type="text" id="fMid" autocomplete="off"></div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="saveBtn" type="button">Add student</button>
+        <button class="btn alt hidden" id="cancelEdit" type="button">Cancel edit</button>
+      </div>
+      <div class="msg" id="formMsg" role="status" aria-live="polite"></div>
+
+      <details>
+        <summary>Add many students at once</summary>
+        <p class="note">One student per line: <b>ID number, Last name, First name, Middle name</b> (middle is optional). You can paste straight from Excel. IDs already in the list are skipped.</p>
+        <textarea id="bulk" placeholder="BSMT25-001, Dela Cruz, Juan, Santos&#10;BSMT25-002, Reyes, Maria"></textarea>
+        <div class="actions"><button class="btn alt" id="bulkBtn" type="button">Add all</button></div>
+        <div class="msg" id="bulkMsg" role="status" aria-live="polite"></div>
+      </details>
+    </section>
+
+    <section class="card hidden" id="settingsCard">
+      <h2>Deadline and changes</h2>
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); align-items:end">
+        <div><label for="deadlineIn">Picking closes on (empty = no deadline)</label><input type="datetime-local" id="deadlineIn"></div>
+        <label class="showpw" style="margin:0 0 10px"><input type="checkbox" id="allowChanges"> Let students change their own size until the deadline</label>
+      </div>
+      <div class="actions"><button class="btn" id="saveSettings" type="button">Save settings</button></div>
+      <div class="msg" id="settingsMsg" role="status" aria-live="polite"></div>
+    </section>
+
+    <section class="card">
+      <h2>Class list</h2>
+      <div class="chips" id="stats"></div>
+      <div class="prog" aria-hidden="true"><i id="progFill"></i></div>
+      <div class="bar" style="margin-top:16px">
+        <div class="search"><label for="q">Search</label><input type="search" id="q" placeholder="Name or ID number"></div>
+        <div style="min-width:170px"><label for="view">Show</label>
+          <select id="view">
+            <option value="all">Everyone</option>
+            <option value="picked">Picked a size</option>
+            <option value="pending">Not yet picked</option>
+          </select>
+        </div>
+        <div>
+          <label for="exportWhich">Export</label>
+          <select id="exportWhich">
+            <option value="all">Everyone</option>
+            <option value="picked">Only those who picked</option>
+            <option value="pending">Only those not yet picked</option>
+          </select>
+          <div class="actions" style="margin-top:8px">
+            <button class="btn" id="pdfBtn" type="button">Export PDF</button>
+            <button class="btn" id="docBtn" type="button">Export Word</button>
+            <button class="btn alt" id="copyBtn" type="button">Copy "not yet" list</button>
+            <button class="btn alt" id="refreshBtn" type="button">Refresh</button>
+            <button class="btn alt" id="csvBtn" type="button">Backup CSV</button>
+          </div>
+        </div>
+      </div>
+      <p class="note">Exports are sorted A to Z by last name.</p>
+      <div class="msg" id="listMsg" role="status" aria-live="polite"></div>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>#</th><th>ID number</th><th>Name (last name first)</th><th>Size</th><th id="thActions">Actions</th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.0/dist/umd/supabase.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script>
+  // ====== PUT YOUR SUPABASE DETAILS HERE (same as index.html) ======
+  const SUPABASE_URL = "https://rzhhhlwzgnwofdnfyajq.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6aGhobHd6Z253b2ZkbmZ5YWpxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE4MzQwNjEsImV4cCI6MjEwNzQxMDA2MX0.TrkcKsvBs0NGYcjpYvji3KopN7aWe73x7BZLOIg9Th8";
+  // =================================================================
+
+  const SECTION = "BSMT-2A";
+  const SIZES = ["XS","S","M","L","XL","XXL","XXXL"];
+  const $ = id => document.getElementById(id);
+  const configured = !SUPABASE_URL.includes("YOUR-PROJECT-ID");
+  const sb = configured ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+  const collator = new Intl.Collator("en", { sensitivity: "base" });
+
+  let students = [];
+  let editingId = null;
+
+  const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const nice = s => s.trim().replace(/\s+/g, " ");
+  const display = s => `${s.last_name}, ${s.first_name}${s.middle_name ? " " + s.middle_name : ""}`;
+  function msg(id, text, type){ const m = $(id); m.textContent = text; m.className = "msg show " + (type || "err"); }
+  function clearMsg(id){ $(id).className = "msg"; }
+
+  function sorted(list){
+    return [...list].sort((a, b) =>
+      collator.compare(a.last_name, b.last_name) ||
+      collator.compare(a.first_name, b.first_name) ||
+      collator.compare(a.middle_name || "", b.middle_name || ""));
+  }
+
+  // ---------- auth (username + password, two roles) ----------
+  // Usernames are turned into a hidden email so Supabase can sign them in.
+  const EMAIL_DOMAIN = "@bsmt2a.example.com";
+  let role = null;                       // "admin" (full access) or "viewer" (view + export only)
+  const canEdit = () => role === "admin";
+
+  async function init(){
+    if (!configured) { msg("loginMsg", "Add your Supabase URL and anon key in admin.html first."); return; }
+    const { data } = await sb.auth.getSession();
+    if (data.session) await enter(); else leave();
+  }
+  async function enter(){
+    const { data, error } = await sb.rpc("my_role");
+    if (error || !data) {
+      await sb.auth.signOut(); leave();
+      msg("loginMsg", "This account does not have access. Ask the admin to add you.");
+      return;
+    }
+    role = data;
+    $("loginCard").classList.add("hidden");
+    $("panel").classList.remove("hidden");
+    $("signOut").classList.remove("hidden");
+    $("roleTag").textContent = canEdit() ? "Admin" : "Viewer (view and export)";
+    $("roleTag").classList.remove("hidden");
+    $("addCard").classList.toggle("hidden", !canEdit());
+    $("settingsCard").classList.toggle("hidden", !canEdit());
+    if (canEdit()) loadSettings();
+    $("thActions").classList.toggle("hidden", !canEdit());
+    load();
+  }
+  function leave(){
+    role = null;
+    $("loginCard").classList.remove("hidden");
+    $("panel").classList.add("hidden");
+    $("signOut").classList.add("hidden");
+    $("roleTag").classList.add("hidden");
+  }
+  $("signIn").addEventListener("click", async () => {
+    clearMsg("loginMsg");
+    if (!configured) { msg("loginMsg", "Add your Supabase URL and anon key in admin.html first."); return; }
+    const user = $("user").value.trim().toLowerCase().replace(/\s+/g, "");
+    if (!user || !$("pw").value) { msg("loginMsg", "Type your username and password."); return; }
+    const { error } = await sb.auth.signInWithPassword({ email: user + EMAIL_DOMAIN, password: $("pw").value });
+    if (error) { msg("loginMsg", "Wrong username or password."); return; }
+    $("pw").value = ""; await enter();
+  });
+  $("showPw").addEventListener("change", e => { $("pw").type = e.target.checked ? "text" : "password"; });
+  $("pw").addEventListener("keydown", e => { if (e.key === "Enter") $("signIn").click(); });
+  $("signOut").addEventListener("click", async () => { await sb.auth.signOut(); students = []; leave(); });
+
+  // ---------- load + render ----------
+  async function load(){
+    const { data, error } = await sb.from("students").select("*");
+    if (error) { msg("listMsg", "Could not load the list. Check your connection and try signing in again."); return; }
+    students = data; render();
+  }
+
+  function render(){
+    const q = $("q").value.trim().toLowerCase();
+    const v = $("view").value;
+    let list = sorted(students);
+    if (v === "picked") list = list.filter(s => s.size);
+    if (v === "pending") list = list.filter(s => !s.size);
+    if (q) list = list.filter(s => (display(s) + " " + s.student_id).toLowerCase().includes(q));
+
+    // stats
+    const counts = Object.fromEntries(SIZES.map(k => [k, 0]));
+    let pickedN = 0;
+    students.forEach(s => { if (s.size) { counts[s.size]++; pickedN++; } });
+    $("stats").innerHTML =
+      `<span class="chip"><b>${pickedN}/${students.length}</b>picked</span>` +
+      `<span class="chip"><b>${students.length - pickedN}</b>not yet</span>` +
+      SIZES.map(k => `<span class="chip"><b>${k}</b>${counts[k]}</span>`).join("");
+
+    $("progFill").style.width = (students.length ? Math.round(pickedN / students.length * 100) : 0) + "%";
+    const cols = canEdit() ? 5 : 4;
+    $("rows").innerHTML = list.length ? list.map((s, i) => {
+      const sizeCell = canEdit()
+        ? `<select data-size-for="${s.id}" aria-label="Size for ${esc(display(s))}">
+             <option value="">Not yet</option>
+             ${SIZES.map(k => `<option ${s.size === k ? "selected" : ""}>${k}</option>`).join("")}
+           </select>`
+        : (s.size ? `<span class="ok">${esc(s.size)}</span>` : `<span class="pending">Not yet</span>`);
+      const actions = canEdit()
+        ? `<td><button class="mini" data-edit="${s.id}" type="button">Edit</button>
+               <button class="mini del" data-del="${s.id}" type="button">Delete</button></td>` : "";
+      return `<tr${s.size ? "" : ' class="todo"'}><td>${i + 1}</td><td>${esc(s.student_id)}</td><td>${esc(display(s))}</td><td class="sz">${sizeCell}</td>${actions}</tr>`;
+    }).join("")
+      : `<tr><td colspan="${cols}" class="none">${students.length ? "No match." : "No students yet."}</td></tr>`;
+  }
+  $("q").addEventListener("input", render);
+  $("view").addEventListener("change", render);
+
+  $("rows").addEventListener("change", async e => {
+    const sel = e.target.closest("[data-size-for]"); if (!sel || !canEdit()) return;
+    const val = sel.value || null;
+    const { error } = await sb.from("students")
+      .update({ size: val, picked_at: val ? new Date().toISOString() : null })
+      .eq("id", sel.dataset.sizeFor);
+    if (error) { msg("listMsg", "Could not change that size."); }
+    else { clearMsg("listMsg"); }
+    load();
+  });
+
+  $("rows").addEventListener("click", async e => {
+    if (!canEdit()) return;
+    const ed = e.target.closest("[data-edit]"), del = e.target.closest("[data-del]");
+    if (ed) {
+      const s = students.find(x => String(x.id) === ed.dataset.edit); if (!s) return;
+      editingId = s.id;
+      $("fId").value = s.student_id; $("fLast").value = s.last_name; $("fFirst").value = s.first_name; $("fMid").value = s.middle_name || "";
+      $("formTitle").textContent = "Edit student"; $("saveBtn").textContent = "Save changes";
+      $("cancelEdit").classList.remove("hidden"); clearMsg("formMsg");
+      window.scrollTo({ top: 0, behavior: "smooth" }); $("fLast").focus();
+    }
+    if (del) {
+      const s = students.find(x => String(x.id) === del.dataset.del); if (!s) return;
+      if (!confirm(`Delete ${display(s)}? Their size will be removed too.`)) return;
+      const { error } = await sb.from("students").delete().eq("id", s.id);
+      if (error) msg("listMsg", "Could not delete."); else clearMsg("listMsg");
+      load();
+    }
+  });
+
+  // ---------- add / edit one student ----------
+  function resetForm(){
+    editingId = null;
+    ["fId","fLast","fFirst","fMid"].forEach(i => $(i).value = "");
+    $("formTitle").textContent = "Add a student"; $("saveBtn").textContent = "Add student";
+    $("cancelEdit").classList.add("hidden");
+  }
+  $("cancelEdit").addEventListener("click", () => { resetForm(); clearMsg("formMsg"); });
+
+  $("saveBtn").addEventListener("click", async () => {
+    if (!canEdit()) return;
+    clearMsg("formMsg");
+    const row = {
+      student_id: $("fId").value.trim().toUpperCase(),
+      last_name: nice($("fLast").value),
+      first_name: nice($("fFirst").value),
+      middle_name: nice($("fMid").value) || null
+    };
+    if (!row.student_id || !row.last_name || !row.first_name) { msg("formMsg", "ID number, last name and first name are required."); return; }
+    const res = editingId
+      ? await sb.from("students").update(row).eq("id", editingId)
+      : await sb.from("students").insert(row);
+    if (res.error) {
+      msg("formMsg", res.error.code === "23505" ? "That ID number is already in the list." : "Could not save. Try again.");
+      return;
+    }
+    msg("formMsg", editingId ? "Changes saved." : `${display(row)} added.`, "ok");
+    resetForm(); load(); $("fId").focus();
+  });
+
+  // ---------- add many ----------
+  $("bulkBtn").addEventListener("click", async () => {
+    if (!canEdit()) return;
+    clearMsg("bulkMsg");
+    const rows = [], bad = [];
+    $("bulk").value.split(/\r?\n/).forEach((line, i) => {
+      if (!line.trim()) return;
+      const p = line.split(/\t|,/).map(x => nice(x));
+      if (p.length < 3 || !p[0] || !p[1] || !p[2]) { bad.push(i + 1); return; }
+      rows.push({ student_id: p[0].toUpperCase(), last_name: p[1], first_name: p[2], middle_name: p[3] || null });
+    });
+    if (!rows.length) { msg("bulkMsg", "Nothing to add. Use: ID number, Last name, First name."); return; }
+    const { data, error } = await sb.from("students")
+      .upsert(rows, { onConflict: "student_id", ignoreDuplicates: true }).select();
+    if (error) { msg("bulkMsg", "Could not add the list. Check for repeated ID numbers in your text."); return; }
+    const added = data.length, skipped = rows.length - added;
+    msg("bulkMsg",
+      `${added} added` + (skipped ? `, ${skipped} skipped (ID already listed)` : "") +
+      (bad.length ? `, lines not understood: ${bad.join(", ")}` : "") + ".", "ok");
+    if (!bad.length) $("bulk").value = "";
+    load();
+  });
+
+  // ---------- exports (sorted by last name) ----------
+  function exportData(){
+    let list = sorted(students);
+    const w = $("exportWhich").value;
+    if (w === "picked") list = list.filter(s => s.size);
+    if (w === "pending") list = list.filter(s => !s.size);
+    if (!list.length) { msg("listMsg", "Nothing to export yet."); return null; }
+    clearMsg("listMsg");
+    const counts = Object.fromEntries(SIZES.map(k => [k, 0]));
+    list.forEach(s => { if (s.size) counts[s.size]++; });
+    const totalsText = SIZES.map(k => `${k}: ${counts[k]}`).join("   ") + `   |   With size: ${list.filter(s => s.size).length} of ${list.length}`;
+    const date = new Date().toLocaleDateString("en-PH", { year: "numeric", month: "long", day: "numeric" });
+    return { list, totalsText, date };
+  }
+
+  $("pdfBtn").addEventListener("click", async () => {
+    const d = exportData(); if (!d) return;
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: "pt", format: "a4" });
+    try {
+      const blob = await (await fetch("logo.png")).blob();
+      const logo = await new Promise(res => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.readAsDataURL(blob); });
+      doc.addImage(logo, "PNG", 495, 28, 56, 56);
+    } catch (_) {}
+    doc.setFont("helvetica", "bold"); doc.setFontSize(18);
+    doc.text(`${SECTION} Intramurals T-Shirt Sizes`, 40, 48);
+    doc.setFont("helvetica", "normal"); doc.setFontSize(10);
+    doc.text(`Sorted A to Z by last name   |   ${d.date}`, 40, 66);
+    doc.autoTable({
+      startY: 96,
+      head: [["No.", "Student ID", "Name (Last, First Middle)", "Size"]],
+      body: d.list.map((s, i) => [i + 1, s.student_id, display(s), s.size || "-"]),
+      headStyles: { fillColor: [193, 18, 31], textColor: [255, 255, 255] },
+      styles: { fontSize: 10, cellPadding: 5 },
+      columnStyles: { 0: { cellWidth: 36 }, 1: { cellWidth: 100 }, 3: { cellWidth: 50, halign: "center" } },
+      margin: { left: 40, right: 40 },
+      didDrawPage: () => { doc.setFont("helvetica", "normal"); doc.setFontSize(9); doc.text("Page " + doc.internal.getCurrentPageInfo().pageNumber, 40, doc.internal.pageSize.height - 20); }
+    });
+    const y = doc.lastAutoTable.finalY + 22;
+    doc.setFont("helvetica", "bold"); doc.setFontSize(11);
+    doc.text("Totals", 40, y);
+    doc.setFont("helvetica", "normal");
+    doc.text(d.totalsText, 40, y + 16, { maxWidth: 515 });
+    doc.save(`${SECTION}-tshirt-sizes.pdf`);
+  });
+
+  $("docBtn").addEventListener("click", () => {
+    const d = exportData(); if (!d) return;
+    const rows = d.list.map((s, i) => `<tr><td>${i + 1}</td><td>${esc(s.student_id)}</td><td>${esc(display(s))}</td><td align="center">${esc(s.size || "-")}</td></tr>`).join("");
+    const html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head><meta charset="utf-8"><title>${SECTION} Intramurals T-Shirt Sizes</title>
+<style>
+  body{font-family:Calibri,Arial,sans-serif}
+  h1{font-size:20pt;margin:0 0 4pt}
+  p{font-size:10pt;margin:0 0 10pt}
+  table{border-collapse:collapse;width:100%}
+  th{background:#C1121F;color:#FFFFFF;text-align:left;padding:5pt;border:1px solid #C1121F}
+  td{padding:5pt;border:1px solid #999;font-size:11pt}
+</style></head>
+<body>
+<h1>${SECTION} Intramurals T-Shirt Sizes</h1>
+<p>Sorted A to Z by last name | ${esc(d.date)}</p>
+<table>
+<tr><th width="8%">No.</th><th width="22%">Student ID</th><th>Name (Last, First Middle)</th><th width="12%">Size</th></tr>
+${rows}
+</table>
+<p style="margin-top:12pt"><b>Totals</b><br>${esc(d.totalsText)}</p>
+</body></html>`;
+    const blob = new Blob(["\ufeff", html], { type: "application/msword" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `${SECTION}-tshirt-sizes.doc`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  });
+
+  // ---------- deadline settings ----------
+  function toLocalInput(iso){ const d = new Date(iso); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 16); }
+  async function loadSettings(){
+    const { data } = await sb.rpc("get_settings");
+    if (data && data[0]) { $("deadlineIn").value = data[0].deadline ? toLocalInput(data[0].deadline) : ""; $("allowChanges").checked = data[0].allow_changes; }
+  }
+  $("saveSettings").addEventListener("click", async () => {
+    if (!canEdit()) return;
+    const v = $("deadlineIn").value;
+    const { error } = await sb.from("settings").update({ deadline: v ? new Date(v).toISOString() : null, allow_changes: $("allowChanges").checked }).eq("id", 1);
+    msg("settingsMsg", error ? "Could not save settings. Did you run the new supabase-setup.sql?" : "Settings saved.", error ? "err" : "ok");
+  });
+
+  // ---------- backup CSV ----------
+  $("csvBtn").addEventListener("click", () => {
+    const list = sorted(students);
+    if (!list.length) { msg("listMsg", "Nothing to back up yet."); return; }
+    const q = v => `"${String(v ?? "").replace(/"/g, '""')}"`;
+    const rows = [["Student ID", "Last name", "First name", "Middle name", "Size", "Picked at"]]
+      .concat(list.map(s => [s.student_id, s.last_name, s.first_name, s.middle_name, s.size, s.picked_at]));
+    const blob = new Blob(["\ufeff" + rows.map(r => r.map(q).join(",")).join("\r\n")], { type: "text/csv" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = `${SECTION}-backup.csv`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  });
+
+  $("refreshBtn").addEventListener("click", () => { load(); msg("listMsg", "List refreshed.", "ok"); });
+  $("copyBtn").addEventListener("click", async () => {
+    const todo = sorted(students).filter(s => !s.size).map(display);
+    if (!todo.length) { msg("listMsg", "Everyone has picked a size!", "ok"); return; }
+    const text = `BSMT-2A Intramurals t-shirt sizes: still waiting on ${todo.length} student${todo.length > 1 ? "s" : ""}:\n` + todo.map((n, i) => `${i + 1}. ${n}`).join("\n");
+    try { await navigator.clipboard.writeText(text); msg("listMsg", `Copied ${todo.length} names. Paste them in your group chat.`, "ok"); }
+    catch (_) { msg("listMsg", "Could not copy. Your browser blocked it."); }
+  });
+
+  init();
+</script>
+</body>
+</html>
