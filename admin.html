@@ -134,6 +134,19 @@
       <div class="msg" id="settingsMsg" role="status" aria-live="polite"></div>
     </section>
 
+    <section class="card hidden" id="acctCard">
+      <h2>Login accounts</h2>
+      <p class="note" style="margin:0 0 12px">Change a username or password for yourself or the president. Leave a box empty to keep it as is. Passwords need 8 or more characters.</p>
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
+        <div><label for="acctSel">Account</label><select id="acctSel"></select></div>
+        <div><label for="acctUser">New username</label><input type="text" id="acctUser" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="letters, numbers . _ -"></div>
+        <div><label for="acctPw">New password</label><input type="password" id="acctPw" autocomplete="new-password"></div>
+        <div><label for="acctPw2">Type it again</label><input type="password" id="acctPw2" autocomplete="new-password"></div>
+      </div>
+      <div class="actions"><button class="btn" id="acctSave" type="button">Save account changes</button></div>
+      <div class="msg" id="acctMsg" role="status" aria-live="polite"></div>
+    </section>
+
     <section class="card">
       <h2>Class list</h2>
       <div class="chips" id="stats"></div>
@@ -212,6 +225,7 @@
   const EMAIL_DOMAIN = "@bsmt2a.example.com";
   let role = null;                       // "admin" (full access) or "viewer" (view + export only)
   const canEdit = () => role === "admin";
+  let myUser = "";
 
   async function init(){
     if (!configured) { msg("loginMsg", "Add your Supabase URL and anon key in admin.html first."); return; }
@@ -226,6 +240,8 @@
       return;
     }
     role = data;
+    const { data: sess } = await sb.auth.getSession();
+    myUser = ((sess.session && sess.session.user.email) || "").split("@")[0];
     $("loginCard").classList.add("hidden");
     $("panel").classList.remove("hidden");
     $("signOut").classList.remove("hidden");
@@ -233,7 +249,8 @@
     $("roleTag").classList.remove("hidden");
     $("addCard").classList.toggle("hidden", !canEdit());
     $("settingsCard").classList.toggle("hidden", !canEdit());
-    if (canEdit()) loadSettings();
+    $("acctCard").classList.toggle("hidden", !canEdit());
+    if (canEdit()) { loadSettings(); loadStaff(); }
     $("thActions").classList.toggle("hidden", !canEdit());
     load();
   }
@@ -458,6 +475,33 @@ ${rows}
     a.download = `${SECTION}-tshirt-sizes.doc`;
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  });
+
+  // ---------- login accounts (change username / password) ----------
+  async function loadStaff(){
+    const { data } = await sb.rpc("list_staff");
+    $("acctSel").innerHTML = (data || []).map(s =>
+      `<option value="${esc(s.username)}">${esc(s.username)} (${s.role === "admin" ? "admin" : "president / viewer"})</option>`).join("");
+  }
+  $("acctSave").addEventListener("click", async () => {
+    if (!canEdit()) return;
+    clearMsg("acctMsg");
+    const target = $("acctSel").value, newUser = $("acctUser").value.trim().toLowerCase().replace(/\s+/g, ""), pw = $("acctPw").value;
+    if (!newUser && !pw) { msg("acctMsg", "Type a new username, a new password, or both."); return; }
+    if (pw && pw !== $("acctPw2").value) { msg("acctMsg", "The two passwords do not match."); return; }
+    if (pw && pw.length < 8) { msg("acctMsg", "Use a password with at least 8 characters."); return; }
+    const { data, error } = await sb.rpc("admin_set_credentials", { p_username: target, p_new_username: newUser || null, p_new_password: pw || null });
+    const text = { forbidden: "Only the admin can do this.", not_found: "That account is not in the staff list.", no_login: "No login exists for that account in Supabase.",
+      weak_password: "Use a password with at least 8 characters.", bad_username: "Usernames use 3 to 30 letters, numbers, dots, dashes or underscores.",
+      username_taken: "That username is already used." };
+    if (error || data !== "ok") { msg("acctMsg", error ? "Could not save. Did you run the new supabase-setup.sql?" : (text[data] || "Could not save.")); return; }
+    ["acctUser", "acctPw", "acctPw2"].forEach(i => $(i).value = "");
+    if (newUser && target === myUser) {
+      await sb.auth.signOut(); students = []; leave();
+      msg("loginMsg", "Username changed. Sign in with your new username.", "ok"); return;
+    }
+    msg("acctMsg", "Saved." + (target === myUser && pw ? " Your new password works the next time you sign in." : ""), "ok");
+    loadStaff();
   });
 
   // ---------- deadline settings ----------
